@@ -25,7 +25,7 @@ def cases(x):
 # Create list of dataframes for each country
 country_i = [cases(i) for i in countries]
 
-# Merge lists (axis = 0, to see each country separately)
+# Combine dataframes (axis = 0, to see each country separately)
 df5 = pd.concat(country_i, axis = 1, sort = True).reset_index()
 print(df5)
 
