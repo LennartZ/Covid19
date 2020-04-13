@@ -8,7 +8,7 @@ countries = ['Germany','Spain','Italy']
 # Confirmed cases with date and more than 50 death
 def cases(x):
    confirmed_list = [i['Cases'] for i in requests.get(f'https://api.covid19api.com/total/country/{x}/status/confirmed').json()]
-   c_date_list = [i['Date'] for i in requests.get(f'https://api.covid19api.com/total/country/{x}/status/confirmed').json() ]    
+   c_date_list = [i['Date'] for i in requests.get(f'https://api.covid19api.com/total/country/{x}/status/confirmed').json()]    
       
    deaths_list = [i['Cases'] for i in requests.get(f'https://api.covid19api.com/total/country/{x}/status/deaths').json() if i['Cases'] >= 50] 
    d_date_list = [i['Date'] for i in requests.get(f'https://api.covid19api.com/total/country/{x}/status/deaths').json() if i['Cases'] >= 50]    
