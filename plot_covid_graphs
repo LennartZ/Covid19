@@ -1,0 +1,80 @@
+import requests
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Get Data
+r_d_de = requests.get('https://api.covid19api.com/total/country/germany/status/deaths').json()
+r_c_de = requests.get('https://api.covid19api.com/total/country/germany/status/confirmed').json()
+r_d_it = requests.get('https://api.covid19api.com/total/country/italy/status/deaths').json()
+r_c_it = requests.get('https://api.covid19api.com/total/country/italy/status/confirmed').json()
+r_d_es = requests.get('https://api.covid19api.com/total/country/spain/status/deaths').json()
+r_c_es = requests.get('https://api.covid19api.com/total/country/spain/status/confirmed').json()
+r_d_us = requests.get('https://api.covid19api.com/total/country/us/status/deaths').json()
+r_c_us = requests.get('https://api.covid19api.com/total/country/us/status/confirmed').json()
+r_d_fr = requests.get('https://api.covid19api.com/total/country/france/status/deaths').json()
+r_c_fr = requests.get('https://api.covid19api.com/total/country/france/status/confirmed').json()
+
+# Extract needed data from response
+def confirmed(x):
+   confirmed_list = []
+   for i in x:
+      confirmed_list.append(i['Cases'])
+   return confirmed_list
+
+def dates(x):
+   date_list = []    
+   for i in x:
+      date_list.append(i['Date'])
+   return date_list
+
+def deaths(x):
+   deaths_list = []    
+   for i in x:
+      deaths_list.append(i['Cases'])
+   return deaths_list
+
+# Create lists
+confirmed_de = confirmed(r_c_de)
+date_de = dates(r_c_de)
+death_de = deaths(r_d_de)
+
+confirmed_it = confirmed(r_c_it)
+date_it = dates(r_c_it)
+death_it = deaths(r_d_it)
+
+confirmed_es = confirmed(r_c_es)
+date_es = dates(r_c_es)
+death_es = deaths(r_d_es)
+
+confirmed_us = confirmed(r_c_us)
+date_us = dates(r_c_us)
+death_us = deaths(r_d_us)
+
+confirmed_fr = confirmed(r_c_fr)
+date_fr = dates(r_c_fr)
+death_fr = deaths(r_d_fr)
+
+# Prepare lists
+de_data = list(zip(date_de, confirmed_de, death_de))
+it_data = list(zip(date_it, confirmed_it, death_it))
+es_data = list(zip(date_es, confirmed_es, death_es))
+us_data = list(zip(date_us, confirmed_us, death_us))
+fr_data = list(zip(date_fr, confirmed_fr, death_fr))
+
+# Prepare dataframes
+df1 = pd.DataFrame(de_data, columns =['Date', 'Confirmed DE', 'Deaths DE'])
+df2 = pd.DataFrame(it_data, columns =['Date', 'Confirmed IT', 'Deaths IT'])
+df3 = pd.DataFrame(es_data, columns =['Date', 'Confirmed ES', 'Deaths ES'])
+df4 = pd.DataFrame(us_data, columns =['Date', 'Confirmed US', 'Deaths US'])
+df5 = pd.DataFrame(fr_data, columns =['Date', 'Confirmed FR', 'Deaths FR'])
+
+# Merge dataframes on Date column
+df6 = pd.merge_ordered(df1, df2, on = 'Date')
+df7 = pd.merge_ordered(df6, df3, on = 'Date')
+df8 = pd.merge_ordered(df7, df4, on = 'Date')
+df9 = pd.merge_ordered(df8, df5, on = 'Date')
+
+# Plot Graph
+styles = ['b','g','r','y','c','b','g','r','y','c']
+df9.plot(style = styles, y=['Confirmed DE', 'Confirmed IT', 'Confirmed ES', 'Confirmed US', 'Confirmed FR', 'Deaths DE','Deaths IT', 'Deaths ES', 'Deaths US', 'Deaths FR'])
+plt.show()
