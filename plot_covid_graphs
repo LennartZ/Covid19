@@ -27,7 +27,6 @@ country_i = [cases(i) for i in countries]
 
 # Combine dataframes (axis = 0, to see each country separately)
 df5 = pd.concat(country_i, axis = 1, sort = True).reset_index()
-print(df5)
 
 df5.plot()
 plt.show()
