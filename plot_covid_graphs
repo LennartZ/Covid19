@@ -7,18 +7,11 @@ countries = ['Germany','Spain','Italy']
 
 # Confirmed cases with date and more than 50 death
 def cases(x):
-   confirmed_list = []
-   c_date_list = []    
-   for i in requests.get(f'https://api.covid19api.com/total/country/{x}/status/confirmed').json():
-      confirmed_list.append(i['Cases'])
-      c_date_list.append(i['Date'])
+   confirmed_list = [i['Cases'] for i in requests.get(f'https://api.covid19api.com/total/country/{x}/status/confirmed').json()]
+   c_date_list = [i['Date'] for i in requests.get(f'https://api.covid19api.com/total/country/{x}/status/confirmed').json() ]    
       
-   deaths_list = [] 
-   d_date_list = []    
-   for i in requests.get(f'https://api.covid19api.com/total/country/{x}/status/deaths').json():
-      if i['Cases'] >= 50:
-         deaths_list.append(i['Cases'])
-         d_date_list.append(i['Date'])
+   deaths_list = [i['Cases'] for i in requests.get(f'https://api.covid19api.com/total/country/{x}/status/deaths').json() if i['Cases'] >= 50] 
+   d_date_list = [i['Date'] for i in requests.get(f'https://api.covid19api.com/total/country/{x}/status/deaths').json() if i['Cases'] >= 50]    
 
    confrimed_cases_dates = list(zip(c_date_list, confirmed_list))
    deaths_cases_dates = list(zip(d_date_list, deaths_list))
